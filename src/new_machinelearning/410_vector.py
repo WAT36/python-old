@@ -4,7 +4,6 @@ Created on 2018/09/19
 
 @author: watarutsukagoshi
 '''
-
 import numpy as np
 
 #ベクトルa
@@ -38,7 +37,7 @@ print(d.dot(e))
 ##行列（ベクトル）の大きさ（ノルム）
 print(np.linalg.norm(d))
 
-
+#4.2.2
 #Σn(1000,k=1)を内積を使って計算する
 f=np.ones(1000)     #[1 1 1... 1]
 g=np.arange(1,1001) #[1 2 3... 1000]
