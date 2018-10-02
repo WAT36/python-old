@@ -1,7 +1,7 @@
 '''
 Created on 2018/09/18
 
-@author: watarutsukagoshi
+@author: T.Wakasugi
 '''
 
 import numpy as np
