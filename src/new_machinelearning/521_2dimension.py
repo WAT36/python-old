@@ -46,3 +46,51 @@ ax = plt.subplot(1,1,1,projection='3d')
 show_data2(ax, X0, X1, T)
 plt.show()
 
+#面の表示
+def show_plane(ax,w):
+    px0 = np.linspace(X0_min, X0_max, 5)
+    px1 = np.linspace(X1_min, X1_max, 5)
+    px0,px1 = np.meshgrid(px0,px1)
+    y = w[0]*px0 + w[1]*px1 + w[2]
+    ax.plot_surface(px0,px1,y,rstride=1,cstride=1,alpha=0.3,color='blue',edgecolor='black')
+
+
+#面のMSE
+def mse_plane(x0,x1,t,w):
+    y = w[0]*x0 + w[1]*x1 + w[2]
+    mse = np.mean((y - t)**2)
+    return mse
+
+#メイン
+plt.figure(figsize=(6,5))
+ax = plt.subplot(1,1,1,projection='3d')
+W = [1.5,1,90]
+show_plane(ax,W)
+show_data2(ax, X0, X1, T)
+mse = mse_plane(X0, X1, T, W)
+print("SD={0:.3f} cm".format(np.sqrt(mse)))
+plt.show()
+
+#リスト 5-1-(16)
+#解析解
+def fit_plane(x0,x1,t):
+    c_tx0 = np.mean(t*x0) - np.mean(t) * np.mean(x0)
+    c_tx1 = np.mean(t*x1) - np.mean(t) * np.mean(x1)
+    c_x0x1 = np.mean(x0 * x1) - np.mean(x0) * np.mean(x1)
+    v_x0 = np.var(x0)   #varは分散
+    v_x1 = np.var(x1)
+    w0 = (c_tx1 * c_x0x1 - v_x1 * c_tx0) / (c_x0x1**2 - v_x0 * v_x1)
+    w1 = (c_tx0 * c_x0x1 - v_x0 * c_tx1) / (c_x0x1**2 - v_x0 * v_x1)
+    w2 = -w0 * np.mean(x0) - w1 * np.mean(x1) + np.mean(t)
+    return np.array([w0,w1,w2])
+
+#メイン
+plt.figure(figsize=(6,5))
+ax = plt.subplot(1,1,1,projection='3d')
+W = fit_plane(X0, X1, T)
+print("w0={0:.1f}, w1={1:.1f}, w2={2:.1f}".format(W[0],W[1],W[2]))
+show_plane(ax, W)
+show_data2(ax, X0, X1, T)
+mse = mse_plane(X0, X1, T, W)
+print("SD={0:.3f} cm".format(np.sqrt(mse)))
+plt.show()
